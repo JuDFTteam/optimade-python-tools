@@ -1123,6 +1123,11 @@ class ImplementationValidator:
 
             self._log.debug("Following pagination link to %r.", next_link)
             next_response, _ = self._get_endpoint(next_link)
+            if not next_response:
+                raise ResponseError(
+                    f"Error when testing pagination: the response from `links->next` {next_link!r} failed the previous test."
+                )
+
             check_next_link = bool(check_next_link - 1)
             self._test_page_limit(
                 next_response,
